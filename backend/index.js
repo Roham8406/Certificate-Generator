@@ -1,21 +1,47 @@
 const express = require('express');
 const cors = require('cors');
-const app = express();
+const { Pool } = require('pg');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-// Allow frontend on port 8080 to communicate with this API
+const app = express();
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL
+});
+const JWT_SECRET = process.env.JWT_SECRET || 'SagToSharif';
+
+
 app.use(cors());
-// Allow Express to parse JSON data sent from the frontend
 app.use(express.json());
 
-// Dummy Login Route
-app.post('/api/login', (req, res) => {
+app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
     
-    // Hardcoded check for testing
-    if (username === 'admin' && password === 'password') {
-        return res.json({ success: true, message: 'Login successful!', token: 'dummy-jwt-token' });
+    try {
+        const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+        
+        if (result.rows.length === 0) {
+            return res.status(401).json({ success: false, message: 'نام کاربری نامعتبر است.' });
+        }
+
+        const user = result.rows[0];
+        const isMatch = await bcrypt.compare(password, user.userpass);
+        
+        if (!isMatch) {
+            return res.status(401).json({ success: false, message: 'رمز عبور نامعتبر است.' });
+        }
+
+        const token = jwt.sign(
+            { userId: user.id, username: user.username }, 
+            JWT_SECRET, 
+            { expiresIn: '12h' } // Token expires in 12 hours
+        );
+
+        return res.json({ success: true, message: 'ورود انجام شد.', token: token });
+    } catch (error) {
+        console.error('Login error:', error);
+        return res.status(500).json({ success: false, message: 'خطایی رخ داد. لطفا بعدا تلاش بکنید.' });
     }
-    return res.status(401).json({ success: false, message: 'Invalid credentials' });
 });
 
 // Dummy Certificate Route
