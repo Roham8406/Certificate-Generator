@@ -15,7 +15,7 @@ const authenticateToken = (req, res, next) => {
     if (!token) return res.status(401).json({message: 'دسترسی نامعتبر، مجددا وارد شوید.'});
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) return res.status.json({message: 'دسترسی به نشست شما با خطا مواجه شد،‌مجدد وارد شوید.'});
-        req.userId = decoded.UserId;
+        req.userId = decoded.userId;
         next();
     });
 };
