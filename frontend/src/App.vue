@@ -45,17 +45,25 @@ const login = async () => {
       isLoggedIn.value = true;
       successMessage.value = data.message;
       error.value = '';
+
+      localStorage.setItem('loginSession', data.token);
     } else {
       error.value = data.message;
     }
   } catch (err) {
-    error.value = 'Failed to connect to backend API. Is it running?';
+    error.value = 'خطا در اتصال به سرور';
   }
 };
 
 const getCertificate = async () => {
   try {
-    const response = await fetch('http://localhost:8000/api/certificate');
+    const token = localStorage.getItem('sessionToken');
+    
+    const response = await fetch('http://localhost:8000/api/certificate', {
+      headers: {
+        'Authorization': `Bearer ${token}` 
+      }
+    });
     const data = await response.json();
     certData.value = data.message;
   } catch (err) {
