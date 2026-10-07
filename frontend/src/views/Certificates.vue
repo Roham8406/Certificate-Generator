@@ -1,7 +1,5 @@
 <template>
-  <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
-    <h1>مدارک من (My Certificates)</h1>
-      
+  <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">      
     <button @click="logout" style="background: red; color: white; padding: 5px 15px; margin-bottom: 20px;">
       خروج
     </button>
@@ -39,7 +37,7 @@ onMounted(async () => {
   }
 
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/login`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/my-certificates`, {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` }
     });

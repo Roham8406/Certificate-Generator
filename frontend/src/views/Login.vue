@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter();
 const username = ref('');
@@ -40,5 +40,14 @@ const login = async () => {
     error.value = 'خطا در اتصال به سرور';
   }
 };
+
+onMounted(async () => {
+  const token = localStorage.getItem('loginSession');
+  
+  if (token) {
+    router.push('/certificates');
+    return;
+  }
+});
 
 </script>
