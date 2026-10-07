@@ -1,4 +1,4 @@
-/*
+
 -- Users Table
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
@@ -31,9 +31,9 @@ CREATE TABLE IF NOT EXISTS user_certificates (
 -- The userpass provided is the bcrypt hash for the plain text password: 'password123'
 INSERT INTO users (username, userpass, first_name, last_name)
 VALUES 
-    ('admin', '$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW', 'System', 'Admin'),
-    ('johndoe', '$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW', 'John', 'Doe'),
-    ('janedoe', '$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW', 'Jane', 'Smith')
+    ('ad', '$2b$10$DHeqU/U5.1FVITfSndMAUe8eT13TvGPenVVmB7vFMx8dspiOJ4tqm', 'System', 'Admin'),
+    ('johndoe', '$2b$10$DHeqU/U5.1FVITfSndMAUe8eT13TvGPenVVmB7vFMx8dspiOJ4tqm', 'John', 'Doe'),
+    ('janedoe', '$2b$10$DHeqU/U5.1FVITfSndMAUe8eT13TvGPenVVmB7vFMx8dspiOJ4tqm', 'Jane', 'Smith')
 ON CONFLICT (username) DO NOTHING;
 
 -- 2. Insert Dummy Events
@@ -52,4 +52,3 @@ VALUES
     ((SELECT id FROM users WHERE username = 'johndoe'), (SELECT id FROM events WHERE name = 'DockerCon' LIMIT 1)),
     ((SELECT id FROM users WHERE username = 'janedoe'), (SELECT id FROM events WHERE name = 'Node.js Global Summit' LIMIT 1))
 ON CONFLICT (user_id, event_id) DO NOTHING;
-*/
