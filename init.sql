@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS events (
     name VARCHAR(63) NOT NULL,
     event_date DATE NOT NULL,
     description TEXT DEFAULT NULL,
-    image VARCHAR(255) NOT NULL
+    image VARCHAR(255) NOT NULL,
+    background VARCHAR(255) NOT NULL
 );
 
 
@@ -37,11 +38,11 @@ VALUES
 ON CONFLICT (username) DO NOTHING;
 
 -- 2. Insert Dummy Events
-INSERT INTO events (name, event_date, description, image)
+INSERT INTO events (name, event_date, description, image, background)
 VALUES 
-    ('Node.js Global Summit', '2023-05-15', 'Annual backend developer conference.', '/images/node-summit.png'),
-    ('Vue.js Amsterdam', '2024-02-28', 'The largest Vue framework conference.', '/images/vue-amsterdam.png'),
-    ('DockerCon', '2025-10-04', 'Containerization and deployment workshop.', '/images/dockercon.png');
+    ('Node.js Global Summit', '2023-05-15', 'Annual backend developer conference.', '/images/node-summit.png', '/images/node-summit-bg.png'),
+    ('Vue.js Amsterdam', '2024-02-28', 'The largest Vue framework conference.', '/images/vue-amsterdam.png', '/images/vue-amsterdam-bg.png'),
+    ('DockerCon', '2025-10-04', 'Containerization and deployment workshop.', '/images/dockercon.png', '/images/dockercon-bg.png');
 
 -- 3. Insert Dummy Certificates linking Users to Events
 -- Using subqueries ensures we grab the correct auto-incremented IDs dynamically
