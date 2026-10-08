@@ -74,34 +74,34 @@ app.get('/api/my-certificates', authenticateToken, async(req, res) => {
              WHERE u.id = $1`,
             [req.userId]
         );
-        res.json({
+        return res.json({
             success: true,
             data: result.rows
         });
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('Certificates lookup error:', error);
         return res.status(500).json({ success: false, message: 'خطایی رخ داد. لطفا بعدا تلاش بکنید.' });    
     }
 });
 
-app.get('/api/certificate', authenticateToken, async(req, res) => {
+app.get('/api/certificate/:eventId', authenticateToken, async(req, res) => {
     try {
         const result = await pool.query(
             `SELECT u.first_name, u.last_name, e.name, e.image, uc.hash FROM events e
              JOIN user_certificates uc ON e.id = uc.event_id
              JOIN users u ON u.id = uc.user_id
              WHERE u.id = $1 AND e.id = $2;`,
-            [req.userId, req.eventId]
+            [req.userId, req.params.eventId]
         );
         if (result.rows.length === 0) {
-            return res.status(401).json({ success: false, message: 'گواهی یافت نشد.' });
+            return res.status(403).json({ success: false, message: 'گواهی یافت نشد.' });
         }
-        res.json({
+        return res.json({
             success: true,
             data: result.rows[0]
         });
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('Certificate fetch error:', error);
         return res.status(500).json({ success: false, message: 'خطایی رخ داد. لطفا بعدا تلاش بکنید.' });    
     }
 });
