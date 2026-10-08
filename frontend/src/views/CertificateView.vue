@@ -10,6 +10,12 @@
 
     <div v-else-if="finalImageUrl" class="detail-card">
       <img :src="finalImageUrl" alt="Official Certificate" class="event-image" />
+      
+      <div class="mt-20">
+        <button @click="downloadPDF" class="btn-primary" style="width: 100%; max-width: 300px; font-size: 1.1rem;">
+          دانلود گواهی
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -17,6 +23,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import QRCode from 'qrcode';
+import { jsPDF } from 'jspdf';
 
 const route = useRoute();
 const router = useRouter();
@@ -24,7 +32,10 @@ const router = useRouter();
 const certData = ref(null);
 const error = ref('');
 const loading = ref(true);
-const finalImageUrl = ref(''); // Will hold the base64 baked image
+const finalImageUrl = ref('');
+
+const certWidth = ref(0);
+const certHeight = ref(0);
 
 onMounted(async () => {
   const token = localStorage.getItem('loginSession');
@@ -64,11 +75,12 @@ const bakeTextIntoImage = (data) => {
   
   const img = new Image();
   img.crossOrigin = "Anonymous"; 
-  
   img.src = data.image; 
-  debugger;
 
-  img.onload = () => {
+  img.onload = async () => {
+    certWidth.value = img.width;
+    certHeight.value = img.height;
+
     canvas.width = img.width;
     canvas.height = img.height;
 
@@ -77,7 +89,6 @@ const bakeTextIntoImage = (data) => {
     ctx.font = 'bold 60px sans-serif';
     ctx.fillStyle = '#333333';
     ctx.textAlign = 'center';
-
     const nameX = data.name_x;
     const nameY = data.name_y;
     const fullName = `${data.first_name} ${data.last_name}`;
@@ -85,16 +96,55 @@ const bakeTextIntoImage = (data) => {
 
     ctx.font = '30px monospace';
     ctx.fillStyle = '#777777';
-
     const hashX = data.hash_x;
     const hashY = data.hash_y;
     ctx.fillText(data.hash, hashX, hashY);
 
-    finalImageUrl.value = canvas.toDataURL('image/png');
+    try {
+      const domain = window.location.origin; 
+      const validationUrl = `${domain}/validate/${data.hash}`;
+      
+      const qrDataUrl = await QRCode.toDataURL(validationUrl, {
+        width: 150, 
+        margin: 1,
+        color: {
+          dark: '#000000',
+          light: '#ffffff'
+        }
+      });
+
+      const qrImg = new Image();
+      qrImg.onload = () => {
+        ctx.drawImage(qrImg, data.qrcode_x, data.qrcode_y);
+        finalImageUrl.value = canvas.toDataURL('image/png');
+      };
+      qrImg.src = qrDataUrl;
+
+    } catch (err) {
+      console.error('خطا در تولید QR Code:', err);
+      finalImageUrl.value = canvas.toDataURL('image/png');
+    }
   };
 
   img.onerror = () => {
     error.value = 'خطا در بارگذاری تصویر پس‌زمینه.';
   };
+};
+
+const downloadPDF = () => {
+  if (!finalImageUrl.value) return;
+
+  const orientation = certWidth.value > certHeight.value ? 'landscape' : 'portrait';
+
+  const doc = new jsPDF({
+    orientation: orientation,
+    unit: 'px',
+    format: [certWidth.value, certHeight.value]
+  });
+
+  doc.addImage(finalImageUrl.value, 'PNG', 0, 0, certWidth.value, certHeight.value);
+
+  const fileName = `Certificate_${certData.value.first_name}_${certData.value.last_name}.pdf`;
+  doc.save(fileName);
 };
 </script>
