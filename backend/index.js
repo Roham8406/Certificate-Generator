@@ -106,5 +106,28 @@ app.get('/api/certificate/:eventId', authenticateToken, async(req, res) => {
     }
 });
 
+app.get('/api/validate/:hash', async(req, res) => {
+    try {
+        const result = await pool.query(
+            `SELECT u.first_name, u.last_name, e.name, e.image 
+             FROM user_certificates uc
+             JOIN events e ON e.id = uc.event_id
+             JOIN users u ON u.id = uc.user_id
+             WHERE uc.hash = $1`,
+            [req.params.hash]
+        );
+        if (result.rows.length === 0) {
+            return res.status(404).json({ success: false, message: 'گواهی نامعتبر است.' });
+        }
+        return res.json({
+            success: true,
+            data: result.rows[0]
+        });
+    } catch (error) {
+        console.error('Validation error:', error);
+        return res.status(500).json({ success: false, message: 'خطایی رخ داد. لطفا بعدا تلاش بکنید.' });    
+    }
+});
+
 
 app.listen(8000, () => console.log('Backend running on port 8000'));
