@@ -11,12 +11,12 @@
         
         <h3>{{ cert.name }}</h3> 
         
-        <button style="background: green; color: white; padding: 8px 12px; cursor: pointer; margin-top: 10px;">
-          دانلود (Download)
+        <button @click="download(cert.id)" style="background: green; color: white; padding: 8px 12px; cursor: pointer; margin-top: 10px;">
+          دانلود
         </button>
       </div>
     </div>
-    <p v-else>هیچ مدرکی یافت نشد. (No certificates found.)</p>
+    <p v-else>{{ error }}</p>
   </div>
 </template>
 
@@ -57,5 +57,9 @@ onMounted(async () => {
 const logout = () => {
   localStorage.removeItem('loginSession');
   router.push('/');
+};
+
+const download = (id) => {
+  router.push('/certificate/'+id);
 };
 </script>
