@@ -1,18 +1,18 @@
 <template>
-  <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
-    <button @click="router.back()" style="background: gray; color: white; padding: 5px 15px; margin-bottom: 20px;">
+  <div class="page-container">
+    <button @click="router.back()" class="btn-secondary">
       بازگشت (Back)
     </button>
 
     <div v-if="loading">در حال بارگذاری... (Loading...)</div>
     
-    <p v-else-if="error" style="color: red;">{{ error }}</p>
+    <p v-else-if="error" class="text-error">{{ error }}</p>
 
-    <div v-else-if="certData" style="border: 2px solid #ddd; padding: 20px; border-radius: 12px; max-width: 600px; margin: 0 auto; background: #fafafa;">
-      <h1 style="color: #333;">{{ certData.first_name }} {{ certData.last_name }}</h1>
-      <h2 style="color: #555;">{{ certData.name }}</h2>
-      <h2 style="color: #555;">{{ certData.hash }}</h2>
-      <img :src="certData.image" alt="Event Image" style="max-width: 100%; border-radius: 8px; margin-top: 20px;" />
+    <div v-else-if="certData" class="detail-card">
+      <h1 class="text-dark">{{ certData.first_name }} {{ certData.last_name }}</h1>
+      <h2 class="text-muted">{{ certData.name }}</h2>
+      <h2 class="text-muted">{{ certData.hash }}</h2>
+      <img :src="certData.image" alt="Event Image" class="event-image" />
     </div>
   </div>
 </template>

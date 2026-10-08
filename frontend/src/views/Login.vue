@@ -1,13 +1,13 @@
 <template>
-  <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
+  <div class="page-container">
     <h1>Certificate Portal</h1>
     
     <!-- Login Form -->
     <div v-if="!isLoggedIn">
-      <input v-model="username" placeholder="Username (admin)" style="margin: 5px; padding: 8px;" /><br/>
-      <input v-model="password" type="password" placeholder="Password (password)" style="margin: 5px; padding: 8px;" /><br/>
-      <button @click="login" style="padding: 10px 20px; cursor: pointer; margin-top: 10px;">Login</button>
-      <p style="color: red;">{{ error }}</p>
+      <input v-model="username" placeholder="Username (admin)" class="input-field" /><br/>
+      <input v-model="password" type="password" placeholder="Password (password)" class="input-field" /><br/>
+      <button @click="login" class="btn-primary">Login</button>
+      <p class="text-error">{{ error }}</p>
     </div>
   </div>
 </template>

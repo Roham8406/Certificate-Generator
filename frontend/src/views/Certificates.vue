@@ -1,17 +1,17 @@
 <template>
-  <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">      
-    <button @click="logout" style="background: red; color: white; padding: 5px 15px; margin-bottom: 20px;">
+  <div class="page-container">      
+    <button @click="logout" class="btn-danger">
       خروج
     </button>
 
-    <p v-if="error" style="color: red;">{{ error }}</p>
+    <p v-if="error" class="text-error">{{ error }}</p>
 
     <div v-if="certificates.length > 0">
-      <div v-for="cert in certificates" :key="cert.id" style="border: 1px solid #ccc; margin: 10px auto; padding: 15px; width: 300px; border-radius: 8px;">
+      <div v-for="cert in certificates" :key="cert.id" class="cert-card">
         
         <h3>{{ cert.name }}</h3> 
         
-        <button @click="download(cert.id)" style="background: green; color: white; padding: 8px 12px; cursor: pointer; margin-top: 10px;">
+        <button @click="download(cert.id)" class="btn-success">
           دانلود
         </button>
       </div>

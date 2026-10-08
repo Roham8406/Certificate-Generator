@@ -1,18 +1,18 @@
 <template>
-  <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
+  <div class="page-container">
     <h1>اعتبارسنجی گواهی (Certificate Validation)</h1>
 
-    <div v-if="loading" style="margin-top: 20px;">در حال بررسی... (Checking...)</div>
+    <div v-if="loading" class="mt-20">در حال بررسی... (Checking...)</div>
     
-    <p v-else-if="error" style="color: red; font-size: 1.2rem; margin-top: 20px; font-weight: bold;">
+    <p v-else-if="error" class="text-error-large">
       ❌ {{ error }}
     </p>
 
-    <div v-else-if="validData" style="border: 2px solid green; padding: 30px; border-radius: 12px; max-width: 500px; margin: 30px auto; background: #f0fff0;">
-      <h2 style="color: green; margin-bottom: 20px;">✅ گواهی معتبر است (Valid Certificate)</h2>
+    <div v-else-if="validData" class="validation-card">
+      <h2 class="text-success">✅ گواهی معتبر است (Valid Certificate)</h2>
       
-      <h3 style="color: #333;">نام و نام خانوادگی: {{ validData.first_name }} {{ validData.last_name }}</h3>
-      <h4 style="color: #555; margin-top: 15px;">رویداد: {{ validData.name }}</h4>
+      <h3 class="text-dark">نام و نام خانوادگی: {{ validData.first_name }} {{ validData.last_name }}</h3>
+      <h4 class="text-muted mt-15">رویداد: {{ validData.name }}</h4>
     </div>
   </div>
 </template>
