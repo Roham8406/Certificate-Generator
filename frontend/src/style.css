@@ -215,6 +215,7 @@ code {
   --text: #4a3b32;
   --text-h: #8b1515; 
   --bg: #fdf8eb; 
+  --bg-h: #ded5c5;
   --border: #d4a34b; 
   --border-light: #d4a34ba0;
   --code-bg: #f4e8d3;
@@ -252,6 +253,7 @@ code {
     --text: #e8dbce;
     --text-h: #f0c365;
     --bg: #2a1111;
+    --bg-h: #533f1b;
     --border: #8b3a3a;
     --border-light: #8b3a3aa0;
     --code-bg: #3d1c1c;
@@ -419,7 +421,7 @@ button:active {
   text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
 }
 .btn-secondary {
-  background: #ded5c5;
+  background: var(--bg-h);
   color: var(--text-h);
   padding: 10px 24px;
   margin-bottom: 24px;

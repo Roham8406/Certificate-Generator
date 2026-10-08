@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <button @click="router.back()" class="btn-secondary">
-      بازگشت (Back)
+      بازگشت
     </button>
 
     <div v-if="loading">در حال بارگذاری... (Loading...)</div>

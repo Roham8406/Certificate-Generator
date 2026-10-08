@@ -1,15 +1,15 @@
 <template>
   <div class="page-container">
-    <h1>اعتبارسنجی گواهی (Certificate Validation)</h1>
+    <h1>اعتبارسنجی گواهی</h1>
 
-    <div v-if="loading" class="mt-20">در حال بررسی... (Checking...)</div>
+    <div v-if="loading" class="mt-20">در حال بررسی...</div>
     
     <p v-else-if="error" class="text-error-large">
-      ❌ {{ error }}
+      {{ error }}
     </p>
 
     <div v-else-if="validData" class="validation-card">
-      <h2 class="text-success">✅ گواهی معتبر است (Valid Certificate)</h2>
+      <h2 class="text-success">!گواهی معتبر است</h2>
       
       <h3 class="text-dark">نام و نام خانوادگی: {{ validData.first_name }} {{ validData.last_name }}</h3>
       <h4 class="text-muted mt-15">رویداد: {{ validData.name }}</h4>
