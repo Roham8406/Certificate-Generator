@@ -253,6 +253,7 @@ code {
     --text-h: #f0c365;
     --bg: #2a1111;
     --border: #8b3a3a;
+    --border-light: #8b3a3aa0;
     --code-bg: #3d1c1c;
     --accent: #d4a34b;
     --accent-bg: rgba(212, 163, 75, 0.15);
