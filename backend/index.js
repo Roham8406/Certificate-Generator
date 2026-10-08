@@ -68,7 +68,7 @@ app.post('/api/login', async (req, res) => {
 app.get('/api/my-certificates', authenticateToken, async(req, res) => {
     try {
         const result = await pool.query(
-            `SELECT e.id, e.name FROM events e 
+            `SELECT e.id, e.name, e.description, e.background FROM events e 
              JOIN user_certificates uc ON e.id = uc.event_id
              JOIN users u ON u.id = uc.user_id
              WHERE u.id = $1`,
