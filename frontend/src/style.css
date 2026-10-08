@@ -216,6 +216,7 @@ code {
   --text-h: #8b1515; 
   --bg: #fdf8eb; 
   --border: #d4a34b; 
+  --border-light: #d4a34ba0;
   --code-bg: #f4e8d3;
   --accent: #b22222; 
   --accent-bg: rgba(178, 34, 34, 0.08);
@@ -487,4 +488,10 @@ button:active {
   margin-top: 25px;
   border: 2px solid var(--border);
   box-shadow: var(--shadow);
+}
+
+.event-card-text {
+    background: linear-gradient(90deg, transparent, var(--border-light), var(--border), var(--border), var(--border), var(--border-light), transparent);
+    padding: 10px 0;
+    color: white;
 }

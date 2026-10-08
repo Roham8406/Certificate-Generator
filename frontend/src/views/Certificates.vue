@@ -4,19 +4,19 @@
       خروج
     </button>
 
-    <p v-if="error" class="text-error">{{ error }}</p>
 
     <div v-if="certificates.length > 0">
-      <div v-for="cert in certificates" :key="cert.id" class="cert-card">
-        
-        <h3>{{ cert.name }}</h3> 
+      <div v-for="cert in certificates" :key="cert.id" class="cert-card" 
+           :style="`background-image: url(${cert.background}); background-size: cover;`">        
+        <h3 class="event-card-text">{{ cert.name }}</h3> 
+        <p class="event-card-text">{{ cert.description }}</p>
         
         <button @click="download(cert.id)" class="btn-success">
           دانلود
         </button>
       </div>
     </div>
-    <p v-else>{{ error }}</p>
+    <p v-if="error" class="text-error">{{ error }}</p>
   </div>
 </template>
 
