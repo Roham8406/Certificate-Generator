@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS events (
 CREATE TABLE IF NOT EXISTS user_certificates (
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     event_id INTEGER NOT NULL REFERENCES events(id) ON DELETE CASCADE,
-
+    hash VARCHAR(255) NOT NULL DEFAULT 'not null',
     UNIQUE(user_id, event_id)
 );
 
@@ -47,8 +47,8 @@ VALUES
 -- Using subqueries ensures we grab the correct auto-incremented IDs dynamically
 INSERT INTO user_certificates (user_id, event_id)
 VALUES 
-    ((SELECT id FROM users WHERE username = 'admin'), (SELECT id FROM events WHERE name = 'Node.js Global Summit' LIMIT 1)),
-    ((SELECT id FROM users WHERE username = 'admin'), (SELECT id FROM events WHERE name = 'Vue.js Amsterdam' LIMIT 1)),
+    ((SELECT id FROM users WHERE username = 'ad'), (SELECT id FROM events WHERE name = 'Node.js Global Summit' LIMIT 1)),
+    ((SELECT id FROM users WHERE username = 'ad'), (SELECT id FROM events WHERE name = 'Vue.js Amsterdam' LIMIT 1)),
     ((SELECT id FROM users WHERE username = 'johndoe'), (SELECT id FROM events WHERE name = 'DockerCon' LIMIT 1)),
     ((SELECT id FROM users WHERE username = 'janedoe'), (SELECT id FROM events WHERE name = 'Node.js Global Summit' LIMIT 1))
 ON CONFLICT (user_id, event_id) DO NOTHING;
