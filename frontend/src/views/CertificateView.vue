@@ -109,16 +109,31 @@ const bakeTextIntoImage = (data) => {
       const qrDataUrl = await QRCode.toDataURL(validationUrl, {
         width: 150, 
         margin: 1,
+        errorCorrectionLevel: 'H',
         color: {
           dark: '#000000',
-          light: '#ffffff'
+          light: '#0000'
         }
       });
 
       const qrImg = new Image();
       qrImg.onload = () => {
-        ctx.drawImage(qrImg, data.qrcode_x, data.qrcode_y);
-        finalImageUrl.value = canvas.toDataURL('image/png');
+        ctx.drawImage(qrImg, data.qrcode_x, data.qrcode_y, 150, 150);
+        
+        const logoImg = new Image();
+        logoImg.onload = () => {
+          const logoSize = 80;
+          const logoX = data.qrcode_x + (150 / 2) - (logoSize / 2);
+          const logoY = data.qrcode_y + (150 / 2) - (logoSize / 2);
+          
+          ctx.fillStyle = '#0000'; 
+          ctx.fillRect(logoX - 2, logoY - 2, logoSize + 4, logoSize + 4);
+          
+          ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
+
+          finalImageUrl.value = canvas.toDataURL('image/png');
+        };
+        logoImg.src = '/images/logo.png'; 
       };
       qrImg.src = qrDataUrl;
 
