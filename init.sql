@@ -294,5 +294,8 @@ INSERT INTO user_certificates (user_id, event_id, hash) VALUES
     ((SELECT id FROM users WHERE username = '09023422971'), (SELECT id FROM events WHERE name = 'رویداد تابستانهٔ ۱۴۰۵' LIMIT 1), '03c4ca7f-0060-4683-b6f8-0a72f162d4de'),
     ((SELECT id FROM users WHERE username = '09354158351'), (SELECT id FROM events WHERE name = 'رویداد تابستانهٔ ۱۴۰۵' LIMIT 1), '7e203346-4453-428d-a6b9-f671fcc9a476'),
     ((SELECT id FROM users WHERE username = '09363506539'), (SELECT id FROM events WHERE name = 'رویداد تابستانهٔ ۱۴۰۵' LIMIT 1), 'de0bacba-9527-408d-9847-d9a3498ae7a0'),
-    ((SELECT id FROM users WHERE username = '09362393349'), (SELECT id FROM events WHERE name = 'رویداد تابستانهٔ ۱۴۰۵' LIMIT 1), 'b73761b9-0305-4bad-b33b-88abafbd55c8')
+    ((SELECT id FROM users WHERE username = '09362393349'), (SELECT id FROM events WHERE name = 'رویداد تابستانهٔ ۱۴۰۵' LIMIT 1), 'b73761b9-0305-4bad-b33b-88abafbd55c8'),
+-- DELETE ME
+    ((SELECT id FROM users WHERE username = '09105295370'), (SELECT id FROM events WHERE name = 'مسابقهٔ کفتر دزدی' LIMIT 1), '3c9408cb-a25d-4940-a663-a8d2e144a1a2'),
+
 ON CONFLICT (user_id, event_id) DO NOTHING;
