@@ -3,13 +3,13 @@
     <h1>صفحهٔ ورود</h1>
     
     <div v-if="!isLoggedIn">
-      <input v-model="username" placeholder="Username" class="input-field" /><br/>
+      <input v-model="username" placeholder="نام کاربری" class="input-field" /><br/>
       
       <div style="position: relative; display: inline-block; width: 100%; max-width: 280px; margin: 0 auto;">
         <input 
           v-model="password" 
           :type="showPassword ? 'text' : 'password'" 
-          placeholder="Password" 
+          placeholder="رمز عبور" 
           class="input-field" 
           style="width: 100%; padding-right: 40px; box-sizing: border-box; margin: 5px 0;" 
         />

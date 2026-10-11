@@ -500,6 +500,6 @@ button:active {
 
 .event-card-text {
     background: linear-gradient(90deg, transparent, var(--border-light), var(--border), var(--border), var(--border), var(--border-light), transparent);
-    padding: 10px 100px;
+    padding: 10px 50px;
     color: white;
 }
