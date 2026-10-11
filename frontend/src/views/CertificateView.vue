@@ -118,16 +118,23 @@ const bakeTextIntoImage = (data) => {
 
       const qrImg = new Image();
       qrImg.onload = () => {
+        // Draw the QR code
         ctx.drawImage(qrImg, data.qrcode_x, data.qrcode_y, 150, 150);
         
         const logoImg = new Image();
         logoImg.onload = () => {
-          const logoSize = 80;
-          const logoX = data.qrcode_x + (150 / 2) - (logoSize / 2);
-          const logoY = data.qrcode_y + (150 / 2) - (logoSize / 2);
+          const logoSize = 40;
           
-          ctx.fillStyle = '#0000'; 
-          ctx.fillRect(logoX - 2, logoY - 2, logoSize + 4, logoSize + 4);
+          const centerX = data.qrcode_x + (150 / 2);
+          const centerY = data.qrcode_y + (150 / 2);
+          
+          const logoX = centerX - (logoSize / 2);
+          const logoY = centerY - (logoSize / 2);
+          
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, (logoSize / 2) + 4, 0, 2 * Math.PI); 
+          ctx.fillStyle = '#ffffff'; 
+          ctx.fill();
           
           ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
 
