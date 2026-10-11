@@ -86,19 +86,21 @@ const bakeTextIntoImage = (data) => {
 
     ctx.drawImage(img, 0, 0);
 
-    ctx.font = 'bold 60px sans-serif';
-    ctx.fillStyle = '#333333';
-    ctx.textAlign = 'center';
-    const nameX = data.name_x;
-    const nameY = data.name_y;
-    const fullName = `${data.first_name} ${data.last_name}`;
-    ctx.fillText(fullName, nameX, nameY);
 
     ctx.font = '30px monospace';
     ctx.fillStyle = '#777777';
     const hashX = data.hash_x;
     const hashY = data.hash_y;
     ctx.fillText(data.hash, hashX, hashY);
+
+    ctx.font = 'bold 40px sans-serif';
+    ctx.fillStyle = '#333333';
+    ctx.textAlign = 'right'; 
+    ctx.textBaseline = 'bottom'; 
+    const nameX = data.name_x;
+    const nameY = data.name_y;
+    const fullName = `${data.first_name} ${data.last_name}`;
+    ctx.fillText(fullName, nameX, nameY);
 
     try {
       const domain = window.location.origin; 

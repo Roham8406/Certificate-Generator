@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS user_certificates (
 -- 1. Insert SS05 Event
 INSERT INTO events (name, event_date, description, image, background, name_x, name_y, hash_x, hash_y, qrcode_x, qrcode_y)
 VALUES 
-    ('رویداد تابستانهٔ ۱۴۰۵', '2026-09-16', 'رویداد تابستانهٔ رستا در شهریورماه ۱۴۰۵ در دانشگاه صنعتی شریف برگزار شد.', '/images/SS05.png', '/images/SS05-bg.png', 440, 310, 200, 250, 300, 450),
+    ('رویداد تابستانهٔ ۱۴۰۵', '2026-09-16', 'رویداد تابستانهٔ رستا در شهریورماه ۱۴۰۵ در دانشگاه صنعتی شریف برگزار شد.', '/images/SS05.png', '/images/SS05-bg.png', 663, 450, 220, 1218, 130, 1000),
     ('مسابقهٔ کفتر دزدی', '2026-09-16', 'در رویداد تابستانهٔ ۱۴۰۵ کفتر رستا مفقود شده و دانش‌آموزان در پی تشخیص سارق کفتر می‌گشتند..', '/images/kaftar05.png', '/images/kaftar05-bg.png', 440, 310, 200, 250, 300, 450);
 
 
