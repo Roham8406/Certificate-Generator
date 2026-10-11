@@ -443,7 +443,7 @@ button:active {
   margin: 20px auto;
   padding: 24px;
   width: 100%;
-  max-width: 320px;
+  max-width: 640px;
   border-radius: 12px; /* Smoothed out the traditional square edges */
   background: var(--bg);
   box-shadow: var(--shadow);
@@ -499,6 +499,6 @@ button:active {
 
 .event-card-text {
     background: linear-gradient(90deg, transparent, var(--border-light), var(--border), var(--border), var(--border), var(--border-light), transparent);
-    padding: 10px 0;
+    padding: 10px 100px;
     color: white;
 }
