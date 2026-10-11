@@ -20,9 +20,7 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-const allowedOrigins = process.env.ALLOWED_ORIGINS 
-    ? process.env.ALLOWED_ORIGINS.split(',') 
-    : ['http://localhost:8080'];
+const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',') 
 
 app.use(cors({
     origin: function(origin, callback) {

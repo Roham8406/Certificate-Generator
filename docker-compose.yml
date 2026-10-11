@@ -20,6 +20,8 @@ services:
     environment:
       DATABASE_URL: postgresql://admin:secretpassword@db:5432/cert_db
       JWT_SECRET: "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+      ALLOWED_ORIGINS: http://localhost:8080
+
 
   frontend:
     build: ./frontend
