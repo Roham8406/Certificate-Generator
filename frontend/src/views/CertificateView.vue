@@ -5,10 +5,11 @@
     </button>
 
     <div v-if="loading" class="loading-container">
-      <p class="text-dark" style="margin-bottom: 15px; font-weight: bold;">در حال آماده‌سازی گواهی...</p>
+      <!-- <p class="text-dark" style="margin-bottom: 15px; font-weight: bold;">{{ loadingMessage }}</p> -->
       <div class="progress-bar">
-        <div class="progress-bar-fill"></div>
+        <div class="progress-bar-fill" :style="{ width: progress + '%' }"></div>
       </div>
+      <!-- <p class="text-muted" style="margin-top: 10px; font-size: 0.9rem;">{{ progress }}%</p> -->
     </div>
     
     <p v-else-if="error" class="text-error">{{ error }}</p>
@@ -39,6 +40,9 @@ const error = ref('');
 const loading = ref(true);
 const finalImageUrl = ref('');
 
+const progress = ref(0);
+const loadingMessage = ref('در حال دریافت اطلاعات سرور...');
+
 const certWidth = ref(0);
 const certHeight = ref(0);
 
@@ -63,10 +67,21 @@ onMounted(async () => {
     if (data.success) {
       certData.value = data.data;
       
-      // CRITICAL UPDATE: Wait for the custom Abar fonts to load before drawing
-      document.fonts.ready.then(() => {
-        bakeTextIntoImage(data.data);
-      });
+      progress.value = 25;
+      loadingMessage.value = 'در حال بارگذاری فونت‌ها...';
+      
+      try {
+        // Await both normal and bold weights so the Canvas doesn't draw prematurely
+        await document.fonts.load('10px "Abar Mid"');
+        await document.fonts.load('bold 10px "Abar Mid"');
+      } catch (fontErr) {
+        console.warn('Font loading skipped or failed:', fontErr);
+      }
+      
+      progress.value = 40;
+      loadingMessage.value = 'در حال دانلود تصویر پس‌زمینه...';
+      
+      bakeTextIntoImage(data.data);
       
     } else {
       error.value = data.message;
@@ -74,11 +89,9 @@ onMounted(async () => {
     }
   } catch (err) {
     error.value = 'خطا در ارتباط با سرور.';
-    console.log(err);
     loading.value = false;
   }
 });
-
 const bakeTextIntoImage = (data) => {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
@@ -88,11 +101,13 @@ const bakeTextIntoImage = (data) => {
   img.src = data.image; 
 
   img.onload = async () => {
+    progress.value = 65;
+    loadingMessage.value = 'در حال ساخت بارکد اختصاصی (QR Code)...';
+
     certWidth.value = img.width;
     certHeight.value = img.height;
     canvas.width = img.width;
     canvas.height = img.height;
-
     ctx.drawImage(img, 0, 0);
 
     const imgW = img.width;
@@ -102,7 +117,6 @@ const bakeTextIntoImage = (data) => {
     const hashY = (data.hash_y / 100) * imgH;
     const hashFontSize = (data.hash_font_size / 100) * imgW;
     
-    // UPDATE: Apply Abar Mid to the hash
     ctx.font = `${hashFontSize}px 'Abar Mid', monospace`;
     ctx.fillStyle = '#777777';
     ctx.fillText(data.hash, hashX, hashY);
@@ -111,7 +125,6 @@ const bakeTextIntoImage = (data) => {
     const nameY = (data.name_y / 100) * imgH;
     const nameFontSize = (data.name_font_size / 100) * imgW;
     
-    // UPDATE: Apply Abar Mid to the name
     ctx.font = `bold ${nameFontSize}px 'Abar Mid', sans-serif`;
     ctx.fillStyle = '#333333';
     ctx.textAlign = 'right'; 
@@ -137,6 +150,9 @@ const bakeTextIntoImage = (data) => {
 
       const qrImg = new Image();
       qrImg.onload = () => {
+        progress.value = 85;
+        loadingMessage.value = 'در حال پردازش و ثبت نهایی...';
+
         ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
         
         const logoImg = new Image();
@@ -151,28 +167,24 @@ const bakeTextIntoImage = (data) => {
           ctx.arc(centerX, centerY, (logoSize / 2) + (qrSize * 0.02), 0, 2 * Math.PI); 
           ctx.fillStyle = '#ffffff'; 
           ctx.fill();
-          
           ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
 
           finalImageUrl.value = canvas.toDataURL('image/png');
-          loading.value = false;
+          
+          // Step 5: Finished. Add a tiny delay so the user sees it hit 100%
+          progress.value = 100;
+          loadingMessage.value = 'تکمیل شد!';
+          setTimeout(() => { loading.value = false; }, 400);
         };
-        logoImg.onerror = () => {
-          finalImageUrl.value = canvas.toDataURL('image/png');
-          loading.value = false;
-        };
+        logoImg.onerror = finishCanvas;
         logoImg.src = '/images/logo.png'; 
       };
-      qrImg.onerror = () => {
-         finalImageUrl.value = canvas.toDataURL('image/png');
-         loading.value = false;
-      }
+      qrImg.onerror = finishCanvas;
       qrImg.src = qrDataUrl;
 
     } catch (err) {
-      console.error('خطا در تولید QR Code:', err);
-      finalImageUrl.value = canvas.toDataURL('image/png');
-      loading.value = false;
+      console.error('QR Code error:', err);
+      finishCanvas();
     }
   };
 
@@ -180,19 +192,20 @@ const bakeTextIntoImage = (data) => {
     error.value = 'خطا در بارگذاری تصویر پس‌زمینه.';
     loading.value = false;
   };
+
+  function finishCanvas() {
+    finalImageUrl.value = canvas.toDataURL('image/png');
+    progress.value = 100;
+    setTimeout(() => { loading.value = false; }, 400);
+  }
 };
 
 const downloadPDF = () => {
   if (!finalImageUrl.value) return;
   const orientation = certWidth.value > certHeight.value ? 'landscape' : 'portrait';
-  const doc = new jsPDF({
-    orientation: orientation,
-    unit: 'px',
-    format: [certWidth.value, certHeight.value]
-  });
+  const doc = new jsPDF({ orientation, unit: 'px', format: [certWidth.value, certHeight.value] });
   doc.addImage(finalImageUrl.value, 'PNG', 0, 0, certWidth.value, certHeight.value);
-  const fileName = `Certificate_${certData.value.first_name}_${certData.value.last_name}.pdf`;
-  doc.save(fileName);
+  doc.save(`Certificate_${certData.value.first_name}_${certData.value.last_name}.pdf`);
 };
 </script>
 
@@ -213,25 +226,12 @@ const downloadPDF = () => {
 }
 
 .progress-bar-fill {
-  height: 100%;
-  width: 40%;
-  background-color: var(--accent);
-  border-radius: 4px;
   position: absolute;
   left: 0;
   top: 0;
-  animation: slide 1.5s ease-in-out infinite;
-}
-
-@keyframes slide {
-  0% {
-    left: -40%;
-  }
-  50% {
-    left: 100%;
-  }
-  100% {
-    left: -40%;
-  }
+  height: 100%;
+  background-color: var(--accent);
+  border-radius: 4px;
+  transition: width 0.3s ease-out;
 }
 </style>
