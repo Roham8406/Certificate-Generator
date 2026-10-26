@@ -6,11 +6,11 @@ import Validate from './views/Validate.vue'
 import Calibrate from './views/Calibrate.vue';
 
 const routes = [
-  { path: '/', component: Login },
-  { path: '/certificates', component: Certificates },
-  { path: '/certificate/:id', component: CertificateView },
-  { path: '/validate/:hash', component: Validate},
-  { path: '/calibrate', component: Calibrate}
+  { path: '/', component: Login, name: 'Login', meta: { title: 'ورود' } },
+  { path: '/certificates', component: Certificates, name: 'Certificates', meta: { title: 'گواهی‌ها' } },
+  { path: '/certificate/:id', component: CertificateView, name: 'CertificateView', meta: { title: 'مشاهده گواهی' } },
+  { path: '/validate/:hash', component: Validate, name: 'Validate', meta: { title: 'اعتبارسنجی گواهی' } },
+  { path: '/calibrate', component: Calibrate, name: 'Calibrate', meta: { title: 'کالیبره' } }
 ];
 
 const router = createRouter({
