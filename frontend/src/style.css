@@ -444,6 +444,7 @@ button:active {
   margin: 20px auto;
   padding: 24px;
   width: 100%;
+  height: 360px;
   max-width: 640px;
   border-radius: 12px; /* Smoothed out the traditional square edges */
   background: var(--bg);

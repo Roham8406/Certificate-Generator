@@ -7,7 +7,7 @@
 
     <div v-if="certificates.length > 0">
       <div v-for="cert in certificates" :key="cert.id" class="cert-card" 
-           :style="`background-image: url(${cert.background}); background-size: cover;`">        
+           :style="`background-image: url(${cert.background}); background-size: 100% 100%;`">        
         <h3 class="event-card-text">{{ cert.name }}</h3> 
         <p class="event-card-text">{{ cert.description }}</p>
         
