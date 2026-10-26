@@ -4,7 +4,12 @@
       بازگشت
     </button>
 
-    <div v-if="loading">در حال بارگذاری...</div>
+    <div v-if="loading" class="loading-container">
+      <p class="text-dark" style="margin-bottom: 15px; font-weight: bold;">در حال آماده‌سازی گواهی...</p>
+      <div class="progress-bar">
+        <div class="progress-bar-fill"></div>
+      </div>
+    </div>
     
     <p v-else-if="error" class="text-error">{{ error }}</p>
 
@@ -60,11 +65,11 @@ onMounted(async () => {
       bakeTextIntoImage(data.data);
     } else {
       error.value = data.message;
+      loading.value = false;
     }
   } catch (err) {
     error.value = 'خطا در ارتباط با سرور.';
     console.log(err);
-  } finally {
     loading.value = false;
   }
 });
@@ -80,7 +85,6 @@ const bakeTextIntoImage = (data) => {
   img.onload = async () => {
     certWidth.value = img.width;
     certHeight.value = img.height;
-
     canvas.width = img.width;
     canvas.height = img.height;
 
@@ -121,10 +125,7 @@ const bakeTextIntoImage = (data) => {
         width: qrSize, 
         margin: 1,
         errorCorrectionLevel: 'H',
-        color: {
-          dark: '#000000',
-          light: '#0000'
-        }
+        color: { dark: '#000000', light: '#0000' }
       });
 
       const qrImg = new Image();
@@ -133,12 +134,9 @@ const bakeTextIntoImage = (data) => {
         
         const logoImg = new Image();
         logoImg.onload = () => {
-          // Scale logo proportionally to the QR code size (approx 26% of QR width)
           const logoSize = qrSize * 0.26; 
-          
           const centerX = qrX + (qrSize / 2);
           const centerY = qrY + (qrSize / 2);
-          
           const logoX = centerX - (logoSize / 2);
           const logoY = centerY - (logoSize / 2);
           
@@ -150,36 +148,83 @@ const bakeTextIntoImage = (data) => {
           ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
 
           finalImageUrl.value = canvas.toDataURL('image/png');
+          loading.value = false;
+        };
+        logoImg.onerror = () => {
+          finalImageUrl.value = canvas.toDataURL('image/png');
+          loading.value = false;
         };
         logoImg.src = '/images/logo.png'; 
       };
+      qrImg.onerror = () => {
+         finalImageUrl.value = canvas.toDataURL('image/png');
+         loading.value = false;
+      }
       qrImg.src = qrDataUrl;
 
     } catch (err) {
       console.error('خطا در تولید QR Code:', err);
       finalImageUrl.value = canvas.toDataURL('image/png');
+      loading.value = false;
     }
   };
 
   img.onerror = () => {
     error.value = 'خطا در بارگذاری تصویر پس‌زمینه.';
+    loading.value = false;
   };
 };
 
 const downloadPDF = () => {
   if (!finalImageUrl.value) return;
-
   const orientation = certWidth.value > certHeight.value ? 'landscape' : 'portrait';
-
   const doc = new jsPDF({
     orientation: orientation,
     unit: 'px',
     format: [certWidth.value, certHeight.value]
   });
-
   doc.addImage(finalImageUrl.value, 'PNG', 0, 0, certWidth.value, certHeight.value);
-
   const fileName = `Certificate_${certData.value.first_name}_${certData.value.last_name}.pdf`;
   doc.save(fileName);
 };
 </script>
+
+<style scoped>
+.loading-container {
+  max-width: 400px;
+  margin: 60px auto;
+  text-align: center;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 40%;
+  background-color: var(--accent);
+  border-radius: 4px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  animation: slide 1.5s ease-in-out infinite;
+}
+
+@keyframes slide {
+  0% {
+    left: -40%;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: -40%;
+  }
+}
+</style>
