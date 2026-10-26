@@ -62,7 +62,12 @@ onMounted(async () => {
     
     if (data.success) {
       certData.value = data.data;
-      bakeTextIntoImage(data.data);
+      
+      // CRITICAL UPDATE: Wait for the custom Abar fonts to load before drawing
+      document.fonts.ready.then(() => {
+        bakeTextIntoImage(data.data);
+      });
+      
     } else {
       error.value = data.message;
       loading.value = false;
@@ -97,7 +102,8 @@ const bakeTextIntoImage = (data) => {
     const hashY = (data.hash_y / 100) * imgH;
     const hashFontSize = (data.hash_font_size / 100) * imgW;
     
-    ctx.font = `${hashFontSize}px monospace`;
+    // UPDATE: Apply Abar Mid to the hash
+    ctx.font = `${hashFontSize}px 'Abar Mid', monospace`;
     ctx.fillStyle = '#777777';
     ctx.fillText(data.hash, hashX, hashY);
 
@@ -105,7 +111,8 @@ const bakeTextIntoImage = (data) => {
     const nameY = (data.name_y / 100) * imgH;
     const nameFontSize = (data.name_font_size / 100) * imgW;
     
-    ctx.font = `bold ${nameFontSize}px sans-serif`;
+    // UPDATE: Apply Abar Mid to the name
+    ctx.font = `bold ${nameFontSize}px 'Abar Mid', sans-serif`;
     ctx.fillStyle = '#333333';
     ctx.textAlign = 'right'; 
     ctx.textBaseline = 'bottom'; 
