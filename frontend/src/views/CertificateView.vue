@@ -169,7 +169,7 @@ const bakeTextIntoImage = (data) => {
           ctx.fill();
           ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
 
-          finalImageUrl.value = canvas.toDataURL('image/png');
+          finalImageUrl.value = canvas.toDataURL('image/png', 0.85);
           
           // Step 5: Finished. Add a tiny delay so the user sees it hit 100%
           progress.value = 100;
@@ -194,7 +194,7 @@ const bakeTextIntoImage = (data) => {
   };
 
   function finishCanvas() {
-    finalImageUrl.value = canvas.toDataURL('image/png');
+    finalImageUrl.value = canvas.toDataURL('image/png', 0.85);
     progress.value = 100;
     setTimeout(() => { loading.value = false; }, 400);
   }
@@ -203,8 +203,15 @@ const bakeTextIntoImage = (data) => {
 const downloadPDF = () => {
   if (!finalImageUrl.value) return;
   const orientation = certWidth.value > certHeight.value ? 'landscape' : 'portrait';
-  const doc = new jsPDF({ orientation, unit: 'px', format: [certWidth.value, certHeight.value] });
-  doc.addImage(finalImageUrl.value, 'PNG', 0, 0, certWidth.value, certHeight.value);
+  
+  const doc = new jsPDF({ 
+    orientation, 
+    unit: 'px', 
+    format: [certWidth.value, certHeight.value],
+    compress: true
+  });
+  doc.addImage(finalImageUrl.value, 'JPEG', 0, 0, certWidth.value, certHeight.value);
+  
   doc.save(`Certificate_${certData.value.first_name}_${certData.value.last_name}.pdf`);
 };
 </script>
