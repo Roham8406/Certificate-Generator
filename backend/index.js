@@ -88,7 +88,7 @@ app.get('/api/certificate/:eventId', authenticateToken, async(req, res) => {
     try {
         const result = await pool.query(
             `SELECT u.first_name, u.last_name, e.name, e.image, uc.hash,
-             e.name_x, e.name_y, e.hash_x, e.hash_y, e.qrcode_x, e.qrcode_y, e.qrcode_size
+             e.name_x, e.name_y, e.hash_x, e.hash_y, e.qrcode_x, e.qrcode_y, e.qrcode_size, e.hash_font_size, e.name_font_size
              FROM events e
              JOIN user_certificates uc ON e.id = uc.event_id
              JOIN users u ON u.id = uc.user_id

@@ -4,7 +4,7 @@
       بازگشت
     </button>
 
-    <div v-if="loading">در حال بارگذاری... (Loading...)</div>
+    <div v-if="loading">در حال بارگذاری...</div>
     
     <p v-else-if="error" class="text-error">{{ error }}</p>
 
@@ -86,19 +86,26 @@ const bakeTextIntoImage = (data) => {
 
     ctx.drawImage(img, 0, 0);
 
+    const imgW = img.width;
+    const imgH = img.height;
 
-    ctx.font = '30px monospace';
+    const hashX = (data.hash_x / 100) * imgW;
+    const hashY = (data.hash_y / 100) * imgH;
+    const hashFontSize = (data.hash_font_size / 100) * imgW;
+    
+    ctx.font = `${hashFontSize}px monospace`;
     ctx.fillStyle = '#777777';
-    const hashX = data.hash_x;
-    const hashY = data.hash_y;
     ctx.fillText(data.hash, hashX, hashY);
 
-    ctx.font = 'bold 40px sans-serif';
+    const nameX = (data.name_x / 100) * imgW;
+    const nameY = (data.name_y / 100) * imgH;
+    const nameFontSize = (data.name_font_size / 100) * imgW;
+    
+    ctx.font = `bold ${nameFontSize}px sans-serif`;
     ctx.fillStyle = '#333333';
     ctx.textAlign = 'right'; 
     ctx.textBaseline = 'bottom'; 
-    const nameX = data.name_x;
-    const nameY = data.name_y;
+    
     const fullName = `${data.first_name} ${data.last_name}`;
     ctx.fillText(fullName, nameX, nameY);
 
@@ -106,8 +113,12 @@ const bakeTextIntoImage = (data) => {
       const domain = window.location.origin; 
       const validationUrl = `${domain}/validate/${data.hash}`;
       
+      const qrSize = (data.qrcode_size / 100) * imgW;
+      const qrX = (data.qrcode_x / 100) * imgW;
+      const qrY = (data.qrcode_y / 100) * imgH;
+
       const qrDataUrl = await QRCode.toDataURL(validationUrl, {
-        width: 150, 
+        width: qrSize, 
         margin: 1,
         errorCorrectionLevel: 'H',
         color: {
@@ -118,21 +129,21 @@ const bakeTextIntoImage = (data) => {
 
       const qrImg = new Image();
       qrImg.onload = () => {
-        // Draw the QR code
-        ctx.drawImage(qrImg, data.qrcode_x, data.qrcode_y, data.qrcode_size, data.qrcode_size);
+        ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
         
         const logoImg = new Image();
         logoImg.onload = () => {
-          const logoSize = 40;
+          // Scale logo proportionally to the QR code size (approx 26% of QR width)
+          const logoSize = qrSize * 0.26; 
           
-          const centerX = data.qrcode_x + (150 / 2);
-          const centerY = data.qrcode_y + (150 / 2);
+          const centerX = qrX + (qrSize / 2);
+          const centerY = qrY + (qrSize / 2);
           
           const logoX = centerX - (logoSize / 2);
           const logoY = centerY - (logoSize / 2);
           
           ctx.beginPath();
-          ctx.arc(centerX, centerY, (logoSize / 2) + 4, 0, 2 * Math.PI); 
+          ctx.arc(centerX, centerY, (logoSize / 2) + (qrSize * 0.02), 0, 2 * Math.PI); 
           ctx.fillStyle = '#ffffff'; 
           ctx.fill();
           

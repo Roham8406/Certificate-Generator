@@ -17,13 +17,15 @@ CREATE TABLE IF NOT EXISTS events (
     description TEXT DEFAULT NULL,
     image VARCHAR(255) NOT NULL,
     background VARCHAR(255) NOT NULL,
-    name_x INTEGER NOT NULL DEFAULT 50,
-    name_y INTEGER NOT NULL DEFAULT 150,
-    qrcode_x INTEGER NOT NULL DEFAULT 300,
-    qrcode_y INTEGER NOT NULL DEFAULT 450,
-    qrcode_size INTEGER NOT NULL DEFAULT 150,
-    hash_x INTEGER NOT NULL DEFAULT 200,
-    hash_y INTEGER NOT NULL DEFAULT 250
+    name_x INTEGER NOT NULL,
+    name_y INTEGER NOT NULL,
+    name_font_size INTEGER NOT NULL,
+    qrcode_x INTEGER NOT NULL,
+    qrcode_y INTEGER NOT NULL,
+    qrcode_size INTEGER NOT NULL,
+    hash_x INTEGER NOT NULL,
+    hash_y INTEGER NOT NULL,
+    hash_font_size INTEGER NOT NULL
 );
 
 
@@ -36,10 +38,10 @@ CREATE TABLE IF NOT EXISTS user_certificates (
 );
 
 -- 1. Insert SS05 Event
-INSERT INTO events (name, event_date, description, image, background, name_x, name_y, hash_x, hash_y, qrcode_x, qrcode_y)
+INSERT INTO events (name, event_date, description, image, background, name_x, name_y, hash_x, hash_y, qrcode_x, qrcode_y, qrcode_size, name_font_size, hash_font_size)
 VALUES 
-    ('رویداد تابستانهٔ ۱۴۰۵', '2026-09-16', 'رویداد تابستانهٔ رستا در شهریورماه ۱۴۰۵ در دانشگاه صنعتی شریف برگزار شد.', '/images/SS05.png', '/images/SS05-bg.png', 663, 450, 220, 1218, 130, 1000),
-    ('مسابقهٔ کفتر دزدی', '2026-09-16', 'در رویداد تابستانهٔ ۱۴۰۵ کفتر رستا مفقود شده و دانش‌آموزان در پی تشخیص سارق کفتر می‌گشتند..', '/images/kaftar05.png', '/images/kaftar05-bg.png', 440, 310, 200, 250, 300, 450);
+    ('رویداد تابستانهٔ ۱۴۰۵', '2026-09-16', 'رویداد تابستانهٔ رستا در شهریورماه ۱۴۰۵ در دانشگاه صنعتی شریف برگزار شد.', '/images/SS05.png', '/images/SS05-bg.png', 10, 20, 30, 40, 50, 60, 10, 5, 3),
+    ('مسابقهٔ کفتر دزدی', '2026-09-16', 'در رویداد تابستانهٔ ۱۴۰۵ کفتر رستا مفقود شده و دانش‌آموزان در پی تشخیص سارق کفتر می‌گشتند..', '/images/kaftar05.png', '/images/kaftar05-bg.png', 10, 20, 30, 40, 50, 60, 10, 5, 3);
 
 
 -- 2. Bulk Insert Users
