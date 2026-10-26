@@ -119,7 +119,7 @@ const bakeTextIntoImage = (data) => {
       const qrImg = new Image();
       qrImg.onload = () => {
         // Draw the QR code
-        ctx.drawImage(qrImg, data.qrcode_x, data.qrcode_y, 150, 150);
+        ctx.drawImage(qrImg, data.qrcode_x, data.qrcode_y, data.qrcode_size, data.qrcode_size);
         
         const logoImg = new Image();
         logoImg.onload = () => {
