@@ -127,7 +127,7 @@ const bakeTextIntoImage = (data) => {
     
     ctx.font = `bold ${nameFontSize}px 'Abar Mid', sans-serif`;
     ctx.fillStyle = '#333333';
-    ctx.textAlign = 'right'; 
+    ctx.textAlign = 'center'; 
     ctx.textBaseline = 'bottom'; 
     
     const fullName = `${data.first_name} ${data.last_name}`;
