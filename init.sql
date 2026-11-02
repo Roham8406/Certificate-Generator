@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS user_certificates (
 INSERT INTO events (name, event_date, description, image, background, name_x, name_y, hash_x, hash_y, qrcode_x, qrcode_y, qrcode_size, name_font_size, hash_font_size)
 VALUES 
     ('رویداد تابستانهٔ ۱۴۰۵', '2026-09-16', 'رویداد تابستانهٔ رستا در شهریورماه ۱۴۰۵ در دانشگاه صنعتی شریف برگزار شد.', '/images/SS05.png', '/images/SS05-bg.png', 45.92, 38.23, 28.28, 93.13, 22.45, 68.68, 9.8, 3.3, 2.24),
-    ('مسابقهٔ کفتر دزدی', '2026-09-16', 'در رویداد تابستانهٔ ۱۴۰۵ کفتر رستا مفقود شده و دانش‌آموزان در پی تشخیص سارق کفتر می‌گشتند..', '/images/kaftar05.png', '/images/kaftar05-bg.png',  33.94, 28.59, 28.28, 93.13, 19.33, 62.95, 9.8, 3.3, 2.24);
+    ('مسابقهٔ کفتر دزدی', '2026-09-16', 'در رویداد تابستانهٔ ۱۴۰۵ کفتر رستا مفقود شده و دانش‌آموزان در پی تشخیص سارق کفتر می‌گشتند..', '/images/kaftar05.png', '/images/kaftar05-bg.png', 37.03, 28.59, 28.28, 93.13, 19.33, 62.95, 9.8, 3.3, 2.24);
 
 
 -- 2. Bulk Insert Users
